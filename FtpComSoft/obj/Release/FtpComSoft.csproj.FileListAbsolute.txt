@@ -3,7 +3,6 @@ F:\C#\FtpClient\FtpComSoft\obj\Release\FtpComSoft.csproj.GenerateResource.cache
 F:\C#\FtpClient\FtpComSoft\bin\Release\FtpComSoft.exe.config
 F:\C#\FtpClient\FtpComSoft\bin\Release\FtpComSoft.exe
 F:\C#\FtpClient\FtpComSoft\bin\Release\FtpComSoft.pdb
-F:\C#\FtpClient\FtpComSoft\obj\Release\FtpComSoft.csproj.AssemblyReference.cache
 F:\C#\FtpClient\FtpComSoft\obj\Release\FtpComSoft.Properties.Resources.resources
 F:\C#\FtpClient\FtpComSoft\obj\Release\FtpComSoft.csproj.CoreCompileInputs.cache
 F:\C#\FtpClient\FtpComSoft\obj\Release\FtpComSoft.exe

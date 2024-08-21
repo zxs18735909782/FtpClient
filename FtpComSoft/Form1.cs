@@ -14,18 +14,39 @@ namespace FtpComSoft
 {
     public partial class Form1 : Form
     {
+
+        FtpInfo m_ftpInfo;          //定义一个FTP信息交互的结构体对象
+        ComFtpCS m_comFtpCS;         //定义交互的信息
+        List<FileInfo> m_FileList;         //定义上传文件的列表信息
+        
+        //保存界面信息到INI文件
+        FtpInfoClass ftpInfoIni = new FtpInfoClass(AppDomain.CurrentDomain.BaseDirectory +  "/config.ini");
+
+
         public Form1()
         {
             InitializeComponent();
             groupBox2.Enabled = false;
+
+            //读取FTP基础参数信息
+            m_ftpInfo.IPADDRESS     = ftpInfoIni.Read("BASIC", "IP_ADDRESS", "127.0.0.1");
+            m_ftpInfo.PORT          = ftpInfoIni.Read("BASIC", "PORT", "21");
+            m_ftpInfo.USER          = ftpInfoIni.Read("BASIC", "USER", "11111");
+            m_ftpInfo.PASSWORD      = ftpInfoIni.Read("BASIC", "PASSWORD", "00000");
+
+            m_comFtpCS.localPath    = ftpInfoIni.Read("COM_INFO", "LOCAL_PATH","");
+            m_comFtpCS.uploadPath   = ftpInfoIni.Read("COM_INFO", "UPLOADPATH", "");
+
+            IpAddress.Text          = m_ftpInfo.IPADDRESS;
+            Port.Text               = m_ftpInfo.PORT;
+            User.Text               = m_ftpInfo.USER;
+            PassWord.Text           = m_ftpInfo.PASSWORD;
+
+            LocalFilePath.Text      = m_comFtpCS.localPath;
+            FtpFilePath.Text        = m_comFtpCS.uploadPath;
+
         }
-
-        FtpInfo         m_ftpInfo;          //定义一个FTP信息交互的结构体对象
-        ComFtpCS        m_comFtpCS;         //定义交互的信息
-        List<FileInfo>  m_FileList;         //定义上传文件的列表信息
-
-
-
+          
         private void Connect_Click(object sender, EventArgs e)
         {
 
@@ -76,18 +97,18 @@ namespace FtpComSoft
             }
             else if(Connect.Text == "断开连接")
             {
-                Connect.Text = "连接";
-                Connect.BackColor = Color.White;
-                groupBox2.Enabled = false;
+                Connect.Text        = "连接";
+                Connect.BackColor   = Color.White;
+                groupBox2.Enabled   = false;
             }
             
         }
 
         private void LocalPath_Click(object sender, EventArgs e)
         {
-            m_comFtpCS.localPath = ToGetFolderPath();
-            LocalFilePath.Text = m_comFtpCS.localPath;
-            if (LocalFilePath.Text == null)
+            m_comFtpCS.localPath    = ToGetFolderPath();
+            LocalFilePath.Text      = m_comFtpCS.localPath;
+            if (LocalFilePath.Text == "null")
             {
                 return;
             }
@@ -105,18 +126,20 @@ namespace FtpComSoft
         public string ToGetFolderPath()
         {
 
-            FolderBrowserDialog dialog = new FolderBrowserDialog();
+            FolderBrowserDialog dialog  = new FolderBrowserDialog();
             //设定根目录
-            dialog.RootFolder = Environment.SpecialFolder.Desktop;
-            DialogResult result = dialog.ShowDialog();
+            dialog.RootFolder           = Environment.SpecialFolder.Desktop;
+            DialogResult result         = dialog.ShowDialog();
 
             if (result == DialogResult.OK)
             {
                 //用户点击了确认按钮,获取选中的路径
                 return dialog.SelectedPath;
             }
-
-            return null;
+            else
+            {
+                return "null";
+            }
         }
 
         private void RemotePath_Click(object sender, EventArgs e)
@@ -127,30 +150,44 @@ namespace FtpComSoft
 
         private void upLoad_Click(object sender, EventArgs e)
         {
- 
-            if(m_comFtpCS.uploadPath == null)
+            if (m_comFtpCS.uploadPath == null || m_comFtpCS.uploadPath == "")
             {
-                if(FtpFilePath.Text == null)
+                if (FtpFilePath.Text == null)
                 {
                     return;
                 }
                 m_comFtpCS.uploadPath = FtpFilePath.Text;
             }
-
+            
             try
             {
+
+                ////写入信息
+                ftpInfoIni.Write("BASIC", "IP_ADDRESS", m_ftpInfo.IPADDRESS);
+                ftpInfoIni.Write("BASIC", "PORT", m_ftpInfo.PORT);
+                ftpInfoIni.Write("BASIC", "USER", m_ftpInfo.USER);
+                ftpInfoIni.Write("BASIC", "PASSWORD", m_ftpInfo.PASSWORD + "\r\n");
+
+                //ftp交互的基本参数
+                ftpInfoIni.Write("COM_INFO", "LOCAL_PATH", m_comFtpCS.localPath);
+                ftpInfoIni.Write("COM_INFO", "UPLOADPATH", m_comFtpCS.uploadPath);
+
+
                 for (int i = 0; i < m_FileList.Count; i++)
                 {
 
                     string fileName = Path.GetFileName(m_FileList[i].FullName);
                     string uri = Path.Combine(m_comFtpCS.uploadPath, fileName).Replace("\\", "/");
 
-                    FtpWebRequest m_ftp = (FtpWebRequest)WebRequest.Create(uri);
-                    m_ftp.Method = WebRequestMethods.Ftp.UploadFile;
-                    m_ftp.Credentials = new NetworkCredential(m_ftpInfo.USER, m_ftpInfo.PASSWORD);
-                    m_ftp.UsePassive = true;
-                    m_ftp.EnableSsl = false;
-                    m_ftp.KeepAlive = false;
+                    logShow.AppendText(DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss  ") +
+                        "上传路径:\r\n\t{ \r\n\t\t" + m_comFtpCS.uploadPath + "\t" + uri + "\t}\r\n");
+
+                    FtpWebRequest m_ftp     = (FtpWebRequest)WebRequest.Create(uri);
+                    m_ftp.Method            = WebRequestMethods.Ftp.UploadFile;
+                    m_ftp.Credentials       = new NetworkCredential(m_ftpInfo.USER, m_ftpInfo.PASSWORD);
+                    m_ftp.UsePassive        = true;
+                    m_ftp.EnableSsl         = false;
+                    m_ftp.KeepAlive         = false;
 
 
                     //读取本地文件到字节组
@@ -187,5 +224,6 @@ namespace FtpComSoft
                         "上传有误,状态22222:\r\n\t{ \r\n\t\t" + ex.Message + "\n\t}\r\n");
             }
         }
+
     }
 }
