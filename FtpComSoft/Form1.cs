@@ -44,6 +44,7 @@ namespace FtpComSoft
 
             LocalFilePath.Text      = m_comFtpCS.localPath;
             FtpFilePath.Text        = m_comFtpCS.uploadPath;
+            FileType.Text           = ftpInfoIni.Read("COM_INFO", "FILE_TYPE", "");
 
         }
           
@@ -85,13 +86,15 @@ namespace FtpComSoft
                     FtpWebResponse response = (FtpWebResponse)ex.Response;
                     if (response != null)
                     {
-                        logShow.AppendText(DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss  ") +
-                            "连接失败,状态11111:\r\n\t{ \r\n\t\t" + response.StatusDescription + "\t}\r\n");
+                        string errLog = DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss  ") +
+                            "连接失败,状态11111:\r\n\t{ \r\n\t\t" + response.StatusDescription + "\t}\r\n";
+                        logShow.AppendText(errLog);
                     }
                     else
                     {
-                        logShow.AppendText(DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss  ") +
-                            "连接失败,状态22222:\r\n\t{ \r\n\t\t" + ex.Message + "\t}\r\n");
+                        string errLog = DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss  ") +
+                            "连接失败,状态22222:\r\n\t{ \r\n\t\t" + ex.Message + "\t}\r\n";
+                        logShow.AppendText(errLog);
                     }
                 }
             }
@@ -106,8 +109,11 @@ namespace FtpComSoft
 
         private void LocalPath_Click(object sender, EventArgs e)
         {
-            m_comFtpCS.localPath    = ToGetFolderPath();
-            LocalFilePath.Text      = m_comFtpCS.localPath;
+
+            m_comFtpCS.localPath = ToGetFolderPath();
+            LocalFilePath.Text = m_comFtpCS.localPath;
+            
+
             if (LocalFilePath.Text == "null")
             {
                 return;
@@ -171,41 +177,50 @@ namespace FtpComSoft
                 //ftp交互的基本参数
                 ftpInfoIni.Write("COM_INFO", "LOCAL_PATH", m_comFtpCS.localPath);
                 ftpInfoIni.Write("COM_INFO", "UPLOADPATH", m_comFtpCS.uploadPath);
+                ftpInfoIni.Write("COM_INFO", "FILE_TYPE", FileType.Text);
 
+
+                string[] upLoadPathList = m_comFtpCS.uploadPath.Split(';');
+                logShow.AppendText(DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss  ") +
+                            "上传路径:\r\n\t{ \r\n\t\t" + upLoadPathList.Length + "\t}\r\n");
 
                 for (int i = 0; i < m_FileList.Count; i++)
                 {
-
-                    string fileName = Path.GetFileName(m_FileList[i].FullName);
-                    string uri = Path.Combine(m_comFtpCS.uploadPath, fileName).Replace("\\", "/");
-
-                    logShow.AppendText(DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss  ") +
-                        "上传路径:\r\n\t{ \r\n\t\t" + m_comFtpCS.uploadPath + "\t" + uri + "\t}\r\n");
-
-                    FtpWebRequest m_ftp     = (FtpWebRequest)WebRequest.Create(uri);
-                    m_ftp.Method            = WebRequestMethods.Ftp.UploadFile;
-                    m_ftp.Credentials       = new NetworkCredential(m_ftpInfo.USER, m_ftpInfo.PASSWORD);
-                    m_ftp.UsePassive        = true;
-                    m_ftp.EnableSsl         = false;
-                    m_ftp.KeepAlive         = false;
-
-
-                    //读取本地文件到字节组
-                    byte[] fileContents = File.ReadAllBytes(m_FileList[i].FullName);
-
-                    //设置上传内容
-                    m_ftp.ContentLength = fileContents.Length;
-                    //将文件内容写入请求流
-                    using (Stream request = m_ftp.GetRequestStream())
+                    for(int j = 0; j < upLoadPathList.Length;j++)
                     {
-                        request.Write(fileContents, 0, fileContents.Length);
-                    }
+                        string fileName = Path.GetFileName(m_FileList[i].FullName);
+                        string uri = Path.Combine(upLoadPathList[j], fileName).Replace("\\", "/");
 
-                    using (FtpWebResponse response = (FtpWebResponse)m_ftp.GetResponse())
-                    {
                         logShow.AppendText(DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss  ") +
-                        "上传完成,状态:\r\n\t{ \r\n\t\t" + m_FileList[i].FullName + "\t\t"  
-                        + response.StatusDescription + "\t}\r\n");
+                            "上传路径:\r\n\t{ \r\n\t\t" + upLoadPathList[j] + "\t" + uri + "\t}\r\n");
+
+                        FtpWebRequest m_ftp = (FtpWebRequest)WebRequest.Create(uri);
+                        m_ftp.Method = WebRequestMethods.Ftp.UploadFile;
+                        m_ftp.Credentials = new NetworkCredential(m_ftpInfo.USER, m_ftpInfo.PASSWORD);
+                        m_ftp.UsePassive = true;
+                        m_ftp.EnableSsl = false;
+                        m_ftp.KeepAlive = false;
+
+
+                        //读取本地文件到字节组
+                        byte[] fileContents = File.ReadAllBytes(m_FileList[i].FullName);
+
+                        //设置上传内容
+                        m_ftp.ContentLength = fileContents.Length;
+                        //将文件内容写入请求流
+                        using (Stream request = m_ftp.GetRequestStream())
+                        {
+                            request.Write(fileContents, 0, fileContents.Length);
+                        }
+
+                        using (FtpWebResponse response = (FtpWebResponse)m_ftp.GetResponse())
+                        {
+                            string errLog = DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss  ") +
+                            "上传完成,状态:\r\n\t{ \r\n\t\t" + m_FileList[i].FullName + "\t\t"
+                            + response.StatusDescription + "\t}\r\n";
+
+                            logShow.AppendText(errLog);
+                        }
                     }
                 }
             }
@@ -213,15 +228,17 @@ namespace FtpComSoft
             {
                 if(ex.Response is FtpWebResponse response)
                 {
-                    logShow.AppendText(DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss  ") +
-                        "上传有误,状态11111:\r\n\t{ \r\n\t\t" + response.StatusCode + "\t\t" 
-                        + response.StatusDescription + "\n\t}\r\n");
+                    string errLog = DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss  ") +
+                        "上传有误,状态11111:\r\n\t{ \r\n\t\t" + response.StatusCode + "\t\t"
+                        + response.StatusDescription + "\n\t}\r\n";
+                    logShow.AppendText(errLog);
                 }
             }
             catch(Exception ex)
             {
-                logShow.AppendText(DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss  ") +
-                        "上传有误,状态22222:\r\n\t{ \r\n\t\t" + ex.Message + "\n\t}\r\n");
+                string errLog = DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss  ") +
+                        "上传有误,状态22222:\r\n\t{ \r\n\t\t" + ex.Message + "\n\t}\r\n";
+                logShow.AppendText(errLog);
             }
         }
 

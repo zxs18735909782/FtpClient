@@ -51,9 +51,9 @@ namespace FtpComSoft
             this.FileType = new System.Windows.Forms.TextBox();
             this.LocalPath = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
-            this.logShow = new System.Windows.Forms.TextBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+            this.logShow = new System.Windows.Forms.RichTextBox();
             this.groupBox1.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -63,6 +63,7 @@ namespace FtpComSoft
             // 
             // groupBox1
             // 
+            this.groupBox1.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.groupBox1.Controls.Add(this.tableLayoutPanel3);
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox1.Location = new System.Drawing.Point(3, 3);
@@ -93,8 +94,8 @@ namespace FtpComSoft
             this.tableLayoutPanel3.Location = new System.Drawing.Point(3, 24);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
             this.tableLayoutPanel3.RowCount = 2;
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 49F));
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel3.Size = new System.Drawing.Size(1316, 114);
             this.tableLayoutPanel3.TabIndex = 3;
             // 
@@ -102,18 +103,20 @@ namespace FtpComSoft
             // 
             this.label1.AutoSize = true;
             this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label1.Font = new System.Drawing.Font("宋体", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label1.Location = new System.Drawing.Point(3, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(257, 65);
+            this.label1.Size = new System.Drawing.Size(257, 57);
             this.label1.TabIndex = 0;
             this.label1.Text = "IP";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // Connect
             // 
             this.Connect.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.Connect.Location = new System.Drawing.Point(1055, 68);
+            this.Connect.Location = new System.Drawing.Point(1055, 60);
             this.Connect.Name = "Connect";
-            this.Connect.Size = new System.Drawing.Size(258, 43);
+            this.Connect.Size = new System.Drawing.Size(258, 51);
             this.Connect.TabIndex = 2;
             this.Connect.Text = "连接";
             this.Connect.UseVisualStyleBackColor = true;
@@ -123,66 +126,81 @@ namespace FtpComSoft
             // 
             this.IpAddress.Dock = System.Windows.Forms.DockStyle.Fill;
             this.IpAddress.Location = new System.Drawing.Point(266, 3);
+            this.IpAddress.Multiline = true;
             this.IpAddress.Name = "IpAddress";
-            this.IpAddress.Size = new System.Drawing.Size(257, 28);
+            this.IpAddress.Size = new System.Drawing.Size(257, 51);
             this.IpAddress.TabIndex = 1;
+            this.IpAddress.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // PassWord
             // 
             this.PassWord.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.PassWord.Location = new System.Drawing.Point(792, 68);
+            this.PassWord.Location = new System.Drawing.Point(792, 60);
+            this.PassWord.Multiline = true;
             this.PassWord.Name = "PassWord";
-            this.PassWord.Size = new System.Drawing.Size(257, 28);
+            this.PassWord.Size = new System.Drawing.Size(257, 51);
             this.PassWord.TabIndex = 1;
+            this.PassWord.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // Port
             // 
             this.Port.Dock = System.Windows.Forms.DockStyle.Fill;
             this.Port.Location = new System.Drawing.Point(792, 3);
+            this.Port.Multiline = true;
             this.Port.Name = "Port";
-            this.Port.Size = new System.Drawing.Size(257, 28);
+            this.Port.Size = new System.Drawing.Size(257, 51);
             this.Port.TabIndex = 1;
+            this.Port.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // label4
             // 
             this.label4.AutoSize = true;
             this.label4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label4.Location = new System.Drawing.Point(529, 65);
+            this.label4.Font = new System.Drawing.Font("宋体", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label4.Location = new System.Drawing.Point(529, 57);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(257, 49);
+            this.label4.Size = new System.Drawing.Size(257, 57);
             this.label4.TabIndex = 0;
             this.label4.Text = "密码";
+            this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
             this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label2.Font = new System.Drawing.Font("宋体", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label2.Location = new System.Drawing.Point(529, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(257, 65);
+            this.label2.Size = new System.Drawing.Size(257, 57);
             this.label2.TabIndex = 0;
             this.label2.Text = "Port";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
             this.label3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label3.Location = new System.Drawing.Point(3, 65);
+            this.label3.Font = new System.Drawing.Font("宋体", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label3.Location = new System.Drawing.Point(3, 57);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(257, 49);
+            this.label3.Size = new System.Drawing.Size(257, 57);
             this.label3.TabIndex = 0;
             this.label3.Text = "用户名";
+            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // User
             // 
             this.User.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.User.Location = new System.Drawing.Point(266, 68);
+            this.User.Location = new System.Drawing.Point(266, 60);
+            this.User.Multiline = true;
             this.User.Name = "User";
-            this.User.Size = new System.Drawing.Size(257, 28);
+            this.User.Size = new System.Drawing.Size(257, 51);
             this.User.TabIndex = 1;
+            this.User.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // groupBox2
             // 
+            this.groupBox2.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.groupBox2.Controls.Add(this.tableLayoutPanel2);
             this.groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox2.Location = new System.Drawing.Point(3, 150);
@@ -197,7 +215,7 @@ namespace FtpComSoft
             this.tableLayoutPanel2.ColumnCount = 5;
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 24.53488F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 75.46512F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 106F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 140F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 153F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 235F));
             this.tableLayoutPanel2.Controls.Add(this.upLoad, 4, 2);
@@ -233,11 +251,13 @@ namespace FtpComSoft
             // LocalFilePath
             // 
             this.LocalFilePath.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.LocalFilePath.Location = new System.Drawing.Point(204, 3);
+            this.LocalFilePath.Location = new System.Drawing.Point(196, 3);
+            this.LocalFilePath.Multiline = true;
             this.LocalFilePath.Name = "LocalFilePath";
-            this.LocalFilePath.Size = new System.Drawing.Size(614, 28);
+            this.LocalFilePath.Size = new System.Drawing.Size(588, 65);
             this.LocalFilePath.TabIndex = 0;
             this.LocalFilePath.Text = "\r\n";
+            this.LocalFilePath.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // RemotePath
             // 
@@ -253,40 +273,48 @@ namespace FtpComSoft
             // FtpFilePath
             // 
             this.FtpFilePath.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.FtpFilePath.Location = new System.Drawing.Point(204, 74);
+            this.FtpFilePath.Location = new System.Drawing.Point(196, 74);
+            this.FtpFilePath.Multiline = true;
             this.FtpFilePath.Name = "FtpFilePath";
-            this.FtpFilePath.Size = new System.Drawing.Size(614, 28);
+            this.FtpFilePath.Size = new System.Drawing.Size(588, 65);
             this.FtpFilePath.TabIndex = 0;
+            this.FtpFilePath.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // label6
             // 
             this.label6.AutoSize = true;
             this.label6.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label6.Font = new System.Drawing.Font("宋体", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label6.Location = new System.Drawing.Point(3, 71);
             this.label6.MinimumSize = new System.Drawing.Size(150, 50);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(195, 71);
+            this.label6.Size = new System.Drawing.Size(187, 71);
             this.label6.TabIndex = 2;
             this.label6.Text = "FTP路径";
+            this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label7
             // 
             this.label7.AutoSize = true;
             this.label7.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label7.Location = new System.Drawing.Point(824, 0);
+            this.label7.Font = new System.Drawing.Font("宋体", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label7.Location = new System.Drawing.Point(790, 0);
             this.label7.MinimumSize = new System.Drawing.Size(80, 50);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(100, 71);
+            this.label7.Size = new System.Drawing.Size(134, 71);
             this.label7.TabIndex = 3;
             this.label7.Text = "文件类型";
+            this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // FileType
             // 
             this.FileType.Dock = System.Windows.Forms.DockStyle.Fill;
             this.FileType.Location = new System.Drawing.Point(930, 3);
+            this.FileType.Multiline = true;
             this.FileType.Name = "FileType";
-            this.FileType.Size = new System.Drawing.Size(147, 28);
+            this.FileType.Size = new System.Drawing.Size(147, 65);
             this.FileType.TabIndex = 4;
+            this.FileType.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // LocalPath
             // 
@@ -303,29 +331,22 @@ namespace FtpComSoft
             // 
             this.label5.AutoSize = true;
             this.label5.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label5.Font = new System.Drawing.Font("宋体", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label5.Location = new System.Drawing.Point(3, 0);
             this.label5.MinimumSize = new System.Drawing.Size(150, 50);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(195, 71);
+            this.label5.Size = new System.Drawing.Size(187, 71);
             this.label5.TabIndex = 2;
             this.label5.Text = "本地路径";
-            // 
-            // logShow
-            // 
-            this.logShow.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.logShow.Location = new System.Drawing.Point(3, 390);
-            this.logShow.Multiline = true;
-            this.logShow.Name = "logShow";
-            this.logShow.Size = new System.Drawing.Size(1322, 601);
-            this.logShow.TabIndex = 2;
+            this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // tableLayoutPanel1
             // 
             this.tableLayoutPanel1.ColumnCount = 1;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Controls.Add(this.logShow, 0, 2);
             this.tableLayoutPanel1.Controls.Add(this.groupBox1, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.groupBox2, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.logShow, 0, 2);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -335,6 +356,18 @@ namespace FtpComSoft
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 606F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(1328, 994);
             this.tableLayoutPanel1.TabIndex = 3;
+            // 
+            // logShow
+            // 
+            this.logShow.BackColor = System.Drawing.SystemColors.WindowFrame;
+            this.logShow.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.logShow.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.logShow.ForeColor = System.Drawing.Color.White;
+            this.logShow.Location = new System.Drawing.Point(3, 390);
+            this.logShow.Name = "logShow";
+            this.logShow.Size = new System.Drawing.Size(1322, 601);
+            this.logShow.TabIndex = 2;
+            this.logShow.Text = "";
             // 
             // Form1
             // 
@@ -354,7 +387,6 @@ namespace FtpComSoft
             this.tableLayoutPanel2.ResumeLayout(false);
             this.tableLayoutPanel2.PerformLayout();
             this.tableLayoutPanel1.ResumeLayout(false);
-            this.tableLayoutPanel1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -378,7 +410,6 @@ namespace FtpComSoft
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox FtpFilePath;
         private System.Windows.Forms.Button RemotePath;
-        private System.Windows.Forms.TextBox logShow;
         private System.Windows.Forms.TextBox FileType;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Button upLoad;
@@ -386,6 +417,7 @@ namespace FtpComSoft
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
+        private System.Windows.Forms.RichTextBox logShow;
     }
 }
 
