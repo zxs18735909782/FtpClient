@@ -352,7 +352,7 @@ namespace FtpComSoft
             // 
             // logShow
             // 
-            this.logShow.BackColor = System.Drawing.SystemColors.WindowFrame;
+            this.logShow.BackColor = System.Drawing.SystemColors.WindowText;
             this.logShow.Dock = System.Windows.Forms.DockStyle.Fill;
             this.logShow.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.logShow.ForeColor = System.Drawing.Color.White;

@@ -76,6 +76,7 @@ namespace FtpComSoft
                     {
                         logShow.AppendText(DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss  ") +
                             "连接成功,状态:\r\n\t{ \r\n\t\t" + response.StatusDescription + "\t}\r\n");
+                        logShow.ScrollToCaret();
                         groupBox2.Enabled = true;
                         Connect.BackColor = Color.Green;
                     }
@@ -89,12 +90,14 @@ namespace FtpComSoft
                         string errLog = DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss  ") +
                             "连接失败,状态11111:\r\n\t{ \r\n\t\t" + response.StatusDescription + "\t}\r\n";
                         logShow.AppendText(errLog);
+                        logShow.ScrollToCaret();
                     }
                     else
                     {
                         string errLog = DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss  ") +
                             "连接失败,状态22222:\r\n\t{ \r\n\t\t" + ex.Message + "\t}\r\n";
                         logShow.AppendText(errLog);
+                        logShow.ScrollToCaret();
                     }
                 }
             }
@@ -110,15 +113,33 @@ namespace FtpComSoft
         private void LocalPath_Click(object sender, EventArgs e)
         {
 
-            m_comFtpCS.localPath = ToGetFolderPath();
-            LocalFilePath.Text = m_comFtpCS.localPath;
-            
+            if(Directory.Exists(LocalFilePath.Text))
+            {
+                logShow.AppendText(DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss  ") +
+                            "路径已存在:\r\n\t{ \r\n\t\t" + LocalFilePath.Text + "\n\t}\r\n");
+                logShow.ScrollToCaret();
 
+                DialogResult result = MessageBox.Show("是否需要重新选择文件夹?", "选择文件夹", 
+                    MessageBoxButtons.YesNoCancel, MessageBoxIcon.Information);
+
+                switch (result)
+                {
+                    case DialogResult.Yes:
+                        LocalFilePath.Text = ToGetFolderPath();
+                        LocalFilePath.Text = LocalFilePath.Text.Replace("\\", "/");
+                        break;
+                    case DialogResult.No:
+                        break;
+                    case DialogResult.Cancel:
+                        break;
+                }
+            }
+
+            m_comFtpCS.localPath = LocalFilePath.Text;
             if (LocalFilePath.Text == "null")
             {
                 return;
             }
-
             
             string[] fileType = FileType.Text.Split(';');
 
@@ -156,7 +177,7 @@ namespace FtpComSoft
 
         private void upLoad_Click(object sender, EventArgs e)
         {
-            if (m_comFtpCS.uploadPath == null || m_comFtpCS.uploadPath == "")
+            if (m_comFtpCS.uploadPath == null || m_comFtpCS.uploadPath == "null")
             {
                 if (FtpFilePath.Text == null)
                 {
@@ -179,7 +200,14 @@ namespace FtpComSoft
                 ftpInfoIni.Write("COM_INFO", "UPLOADPATH", m_comFtpCS.uploadPath);
                 ftpInfoIni.Write("COM_INFO", "FILE_TYPE", FileType.Text);
 
+                //判断列表是否为空
+                if(m_FileList.Count == 0)
+                {
+                    MessageBox.Show("文件列表长度为0,请更新列表后上传!!!","文件列表错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
 
+                //获取上传的多个路径
                 string[] upLoadPathList = m_comFtpCS.uploadPath.Split(';');
               
                 for (int i = 0; i < m_FileList.Count; i++)
@@ -189,8 +217,8 @@ namespace FtpComSoft
                         string fileName = Path.GetFileName(m_FileList[i].FullName);
                         string uri = Path.Combine(upLoadPathList[j], fileName).Replace("\\", "/");
 
-                        logShow.AppendText(DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss  ") +
-                            "上传路径:\r\n\t{ \r\n\t\t" + upLoadPathList[j] + "\t" + uri + "\t}\r\n");
+                        //logShow.AppendText(DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss  ") +
+                        //    "上传路径:\r\n\t{ \r\n\t\t" + upLoadPathList[j] + "\t" + uri + "\n\t}\r\n");
 
                         FtpWebRequest m_ftp = (FtpWebRequest)WebRequest.Create(uri);
                         m_ftp.Method = WebRequestMethods.Ftp.UploadFile;
@@ -214,10 +242,11 @@ namespace FtpComSoft
                         using (FtpWebResponse response = (FtpWebResponse)m_ftp.GetResponse())
                         {
                             string errLog = DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss  ") +
-                            "上传完成,状态:\r\n\t{ \r\n\t\t" + m_FileList[i].FullName + "\t\t"
-                            + response.StatusDescription + "\t}\r\n";
+                            "上传完成,状态:\r\n\t{ \r\n\t\t" + uri + "\r\n\t\t" + m_FileList[i].FullName + "\t\t"
+                            + response.StatusDescription + "\n\t}\r\n";
 
                             logShow.AppendText(errLog);
+                            logShow.ScrollToCaret();
                         }
                     }
                 }
@@ -230,6 +259,7 @@ namespace FtpComSoft
                         "上传有误,状态11111:\r\n\t{ \r\n\t\t" + response.StatusCode + "\t\t"
                         + response.StatusDescription + "\n\t}\r\n";
                     logShow.AppendText(errLog);
+                    logShow.ScrollToCaret();
                 }
             }
             catch(Exception ex)
@@ -237,6 +267,8 @@ namespace FtpComSoft
                 string errLog = DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss  ") +
                         "上传有误,状态22222:\r\n\t{ \r\n\t\t" + ex.Message + "\n\t}\r\n";
                 logShow.AppendText(errLog);
+                //滚动条移动到最新的
+                logShow.ScrollToCaret();
             }
         }
 
