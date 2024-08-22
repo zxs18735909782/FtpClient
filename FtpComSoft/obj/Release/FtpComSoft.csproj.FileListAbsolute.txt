@@ -7,4 +7,3 @@ F:\C#\FtpClient\FtpComSoft\obj\Release\FtpComSoft.Properties.Resources.resources
 F:\C#\FtpClient\FtpComSoft\obj\Release\FtpComSoft.csproj.CoreCompileInputs.cache
 F:\C#\FtpClient\FtpComSoft\obj\Release\FtpComSoft.exe
 F:\C#\FtpClient\FtpComSoft\obj\Release\FtpComSoft.pdb
-F:\C#\FtpClient\FtpComSoft\obj\Release\FtpComSoft.csproj.AssemblyReference.cache

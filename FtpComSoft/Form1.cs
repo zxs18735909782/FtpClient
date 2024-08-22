@@ -181,9 +181,7 @@ namespace FtpComSoft
 
 
                 string[] upLoadPathList = m_comFtpCS.uploadPath.Split(';');
-                logShow.AppendText(DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss  ") +
-                            "上传路径:\r\n\t{ \r\n\t\t" + upLoadPathList.Length + "\t}\r\n");
-
+              
                 for (int i = 0; i < m_FileList.Count; i++)
                 {
                     for(int j = 0; j < upLoadPathList.Length;j++)
