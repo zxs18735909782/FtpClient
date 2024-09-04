@@ -215,6 +215,12 @@ namespace FtpComSoft
                     for(int j = 0; j < upLoadPathList.Length;j++)
                     {
                         string fileName = Path.GetFileName(m_FileList[i].FullName);
+
+                        if(!DirectroyIsExist(upLoadPathList[j], m_ftpInfo.USER, m_ftpInfo.PASSWORD))
+                        {
+                            CreateFtpDirectory(upLoadPathList[j], m_ftpInfo.USER, m_ftpInfo.PASSWORD);
+                        }
+                        
                         string uri = Path.Combine(upLoadPathList[j], fileName).Replace("\\", "/");
 
                         //logShow.AppendText(DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss  ") +
@@ -269,6 +275,52 @@ namespace FtpComSoft
                 logShow.AppendText(errLog);
                 //滚动条移动到最新的
                 logShow.ScrollToCaret();
+            }
+        }
+
+
+
+        //判断路径是否存在
+        public bool DirectroyIsExist(string directoryPath, string username, string password)
+        {
+            try
+            {
+                FtpWebRequest request = (FtpWebRequest)WebRequest.Create(directoryPath);
+                request.Method = WebRequestMethods.Ftp.ListDirectory;
+                request.Credentials = new NetworkCredential(username, password);
+
+                using (FtpWebResponse response = (FtpWebResponse)request.GetResponse())
+                {
+                    return true;
+                }
+            }
+            catch(WebException ex)
+            {
+                FtpWebResponse response = (FtpWebResponse)ex.Response;
+                if (response != null && response.StatusCode == FtpStatusCode.ActionNotTakenFileUnavailable)
+                {
+
+                    CreateFtpDirectory(directoryPath, username, password);
+                    return false; // 目录不存在
+                }
+                else
+                {
+                    throw; // 其他错误
+                }
+            }
+
+        }
+
+        //创建目录
+        public void CreateFtpDirectory(string directoryPath, string username, string password)
+        {
+            FtpWebRequest request = (FtpWebRequest)WebRequest.Create(directoryPath);
+            request.Method = WebRequestMethods.Ftp.MakeDirectory;
+            request.Credentials = new NetworkCredential(username, password);
+
+            using (FtpWebResponse response = (FtpWebResponse)request.GetResponse())
+            {
+                Console.WriteLine($"Directory created: {response.StatusDescription}");
             }
         }
 
